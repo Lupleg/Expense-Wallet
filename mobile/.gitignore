@@ -39,3 +39,7 @@ yarn-error.*
 app-example
 
 .env
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
