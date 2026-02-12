@@ -77,7 +77,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   extra: {
     router: {},
     eas: {
-      projectId: "",
+      projectId: "40da6efb-b736-4586-9f8a-2e10f5c3ae0c",
     },
   },
   owner: "luplegstudios",
