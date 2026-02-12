@@ -35,6 +35,19 @@ const CreateScreen = () => {
   const [isExpense, setIsExpense] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+  const parseJsonResponse = async (response) => {
+    const text = await response.text();
+    if (!text) return null;
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      throw new Error(
+        `Invalid JSON response (status ${response.status}): ${text.slice(0, 200)}`
+      );
+    }
+  };
+
   const handleCreate = async () => {
     // validations
     if (!title.trim()) return Alert.alert("Error", "Please enter a transaction title");
@@ -65,10 +78,13 @@ const CreateScreen = () => {
         }),
       });
 
+      const responseData = await parseJsonResponse(response);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        console.log(errorData);
-        throw new Error(errorData.error || "Failed to create transaction");
+        console.log(responseData);
+        throw new Error(
+          responseData?.error || responseData?.message || "Failed to create transaction"
+        );
       }
 
       Alert.alert("Success", "Transaction created successfully");
