@@ -16,11 +16,29 @@ export const useTransactions = (userId) => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
+  const parseJsonResponse = async (response) => {
+    const text = await response.text();
+    if (!text) return null;
+
+    try {
+      return JSON.parse(text);
+    } catch (error) {
+      throw new Error(
+        `Invalid JSON response (status ${response.status}): ${text.slice(0, 200)}`
+      );
+    }
+  };
+
   // useCallback is used for performance reasons, it will memoize the function
   const fetchTransactions = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/${userId}`);
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
+
+      if (!response.ok) {
+        throw new Error(data?.error || data?.message || `Failed to fetch transactions`);
+      }
+
       setTransactions(data);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -30,7 +48,12 @@ export const useTransactions = (userId) => {
   const fetchSummary = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/summary/${userId}`);
-      const data = await response.json();
+      const data = await parseJsonResponse(response);
+
+      if (!response.ok) {
+        throw new Error(data?.error || data?.message || `Failed to fetch summary`);
+      }
+
       setSummary(data);
     } catch (error) {
       console.error("Error fetching summary:", error);
