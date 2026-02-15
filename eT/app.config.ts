@@ -39,11 +39,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
+    bundleIdentifier: getUniqueIdentifier(),
   },
   android: {
     adaptiveIcon: {
       backgroundColor: "#E6F4FE",
-      foregroundImage: "./assets/images/android-icon-foreground.png",
+      // foregroundImage: "./assets/images/android-icon-foreground.png",
+      foregroundImage: "./assets/images/adaptive-icon.png",
       backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
